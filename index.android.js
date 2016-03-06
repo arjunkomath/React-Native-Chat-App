@@ -1,51 +1,44 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 import React, {
-  AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
-  View
+	AppRegistry,
+	Component,
+	StyleSheet,
+	Navigator,
 } from 'react-native';
 
+var Login = require('./components/login');
+var Channels = require('./components/channels');
+var Chat = require('./components/chat');
+
+var ROUTES = {
+	login: Login,
+	channels: Channels,
+	chat: Chat
+};
+
 class chat_app extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
-  }
+
+	renderScene(route, navigator) {
+		var Component = ROUTES[route.name];
+		return <Component route={route} navigator={navigator} />;
+	}
+
+	render() {
+		return (
+			<Navigator
+			style={ styles.container }
+			initialRoute={ {name: 'login'} }
+			renderScene={this.renderScene}
+			configureScene={ () => { return Navigator.SceneConfigs.FloatFromRight; } }
+			/>
+			);
+	}
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+var styles = StyleSheet.create({
+	container: {
+		flex: 1
+	}
 });
 
 AppRegistry.registerComponent('chat_app', () => chat_app);
