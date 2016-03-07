@@ -20,7 +20,9 @@ class chat_app extends Component {
 
 	renderScene(route, navigator) {
 		var Component = ROUTES[route.name];
-		return <Component route={route} navigator={navigator} />;
+		if (route.name == 'chat') {
+			return <Component route={route} navigator={navigator} user={route.passProps.user} />;
+		} else return <Component route={route} navigator={navigator} />;
 	}
 
 	render() {

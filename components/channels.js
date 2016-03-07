@@ -23,9 +23,15 @@ module.exports = React.createClass({
 			channelName: ''
 		};
 	},
+
 	componentWillMount: function() {
+		var that = this;
 		this.getChannelList(1);
+		sendbird.getUserInfo(function(data) {
+			that.setState({user: data});
+		});
 	},
+
 	render: function() {
 		return (
 			<View style={styles.container}>
@@ -53,6 +59,7 @@ module.exports = React.createClass({
 			);
 	},
 	onChannelPress: function(url) {
+		var that = this;
 		sendbird.joinChannel(
 			url,
 			{
@@ -60,8 +67,7 @@ module.exports = React.createClass({
 					sendbird.connect({
 						successFunc: (data) => {
 							sendbird.getChannelInfo((channel) => {
-								console.log(channel);
-								this.props.navigator.push({ name: 'chat' });
+								this.props.navigator.push({ name: 'chat', passProps: { user: that.state.user } });
 							});
 						},
 						errorFunc: (status, error) => {
